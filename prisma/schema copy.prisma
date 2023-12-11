@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:password@127.0.0.1:3306/learning_express"
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement())
+  timestamp BigInt
+  name      String @db.VarChar(255)
+}
+
+model User {
+ id       String  @id @default(uuid())
+ name     String  @unique
+ email    String  @unique
+ password String
+ role     String
+ isEmailVerified Boolean @default(false)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @default(now()) @map("updated_at")
+ tokens   Token[]
+}
+
+model Token {
+  id String @id @default(uuid())
+  token String 
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  type TokenType
+  expires DateTime
+  revoked Boolean @default(false) @map("blacklisted")
+  createdAt DateTime @default(now()) @map("created_at") 
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+
+enum TokenType {
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
