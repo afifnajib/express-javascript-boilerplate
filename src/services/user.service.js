@@ -1,49 +1,28 @@
 const { prisma } = require("../data-source");
 const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status");
-const { userModel } = require("../models/user.model");
-// const bcrypt = require("bcryptjs");
-
-// const createUser = async (userData) => {
-//   const salt = await bcrypt.genSalt(10);
-//   const hashedPassword = await bcrypt.hash(userData.password, salt);
-
-//   const exists = await prisma.user.findUnique({
-//     where: { email: userData.email },
-//   });
-
-//   if (exists) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, "Email already exists");
-//   }
-
-//   return prisma.user.create({
-//     data: {
-//       ...userData,
-//       password: hashedPassword,
-//       role: "user",
-//     },
-//   });
-// };
+const { validateEmail, hashPassword } = require("../utils/helpers");
 
 const createUser = async (userData) => {
-  const user = new userModel(userData);
-  if (!user.validateEmail()) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid email");
-  }
-  user.hashPassword();
+  const validate = await validateEmail(userData.email);
+  if (!validate) throw new ApiError(httpStatus.BAD_REQUEST, "Invalid email");
+  const hashedPassword = hashPassword(userData.password);
   const exists = await prisma.user.findUnique({
-    where: {
-      email: userData.email,
-    },
+    where: { email: userData.email },
   });
-  if (exists) {
+  if (exists)
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already exists");
-  }
+  const forAdmin = {
+    ...userData,
+    password: hashedPassword,
+    role: "admin",
+  };
+  const forUser = {
+    ...userData,
+    password: hashedPassword,
+  };
   return prisma.user.create({
-    data: {
-      ...user,
-      role: "user",
-    },
+    data: userData.role === undefined ? forAdmin : forUser,
   });
 };
 
@@ -71,28 +50,59 @@ const getUserByEmail = async (email) => {
   });
 };
 
+const profileUser = async (req) => {
+  const currentUser = req;
+  return currentUser;
+};
+
 const getUserById = async (id) => {
-  return prisma.user.findUnique({
+  const user = await prisma.user.findUnique({ where: { id } });
+  delete user.password;
+  return user;
+};
+
+const updateUserById = async (params) => {
+  const user = await validateEmail(params.data.email);
+  if (!user) throw new ApiError(httpStatus.BAD_REQUEST, "Invalid email");
+  const hashedPassword = hashPassword(params.data.password);
+  const emailExists = await prisma.user.findUnique({
+    where: { email: params.data.email },
+  });
+  if (emailExists)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Email already exists");
+  return prisma.user.update({
     where: {
-      id: id,
+      id: params.where.id,
+    },
+    data: {
+      ...params.data,
+      password: hashedPassword,
     },
   });
 };
 
-const updateUser = async (params) => {
-  return prisma.user.update(params);
-};
+const deleteUserById = async (userId) => {
+  const tokenExists = await prisma.token.findUnique({
+    where: { userId },
+  });
 
-const deleteUser = async ({ where }) => {
-  return prisma.user.delete({ where });
+  if (tokenExists) {
+    await prisma.token.delete({
+      where: { userId },
+    });
+  }
+  return prisma.user.delete({
+    where: { id: userId },
+  });
 };
 
 module.exports = {
   createUser,
   getUserByEmail,
+  profileUser,
   getUserById,
   findManyUsers,
   findUniqueUser,
-  updateUser,
-  deleteUser,
+  updateUserById,
+  deleteUserById,
 };

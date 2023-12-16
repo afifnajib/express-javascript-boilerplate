@@ -4,8 +4,8 @@ const userService = require("./user.service");
 const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
 const { tokenTypes } = require("../config/tokens");
-const { userModel } = require("../models/user.model");
 const { prisma } = require("../data-source");
+const { isPasswordMatch } = require("../utils/helpers");
 
 /**
  * Login with username and password
@@ -18,12 +18,11 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   if (!userData) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email");
   }
-  const user = new userModel(userData);
-  if (!user.isPasswordMatch(password)) {
+  const checkPassword = isPasswordMatch(userData.password, password);
+  if (!checkPassword) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
   }
-
-  return user;
+  return userData;
 };
 
 /**

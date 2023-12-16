@@ -9,8 +9,9 @@ const {
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  // const tokens = await tokenService.generateAuthTokens(user);
+  // res.status(httpStatus.CREATED).send({ user, tokens });
+  res.status(httpStatus.CREATED).send(user);
 });
 
 const login = catchAsync(async (req, res) => {
@@ -22,7 +23,8 @@ const login = catchAsync(async (req, res) => {
 
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
-  res.status(httpStatus.NO_CONTENT).send();
+  res.clearCookie("access_token");
+  res.status(httpStatus.NO_CONTENT).send("Logged out successfully");
 });
 
 const refreshTokens = catchAsync(async (req, res) => {

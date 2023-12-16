@@ -8,8 +8,9 @@ class userModel {
     this.password = userData.password;
     this.role = userData.role;
     this.isEmailVerified = userData.isEmailVerified || false;
-    this.createdAt = userData.createdAt || new Date().toISOString();
-    this.updatedAt = userData.updatedAt || new Date().toISOString();
+    // this.createdAt =
+    //   status == "create" ? new Date().toISOString() : userData.createdAt;
+    // this.updatedAt = status == "update" ? userData.updatedAt || new Date().toISOString();
   }
 
   validateEmail() {

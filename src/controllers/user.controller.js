@@ -5,12 +5,14 @@ const catchAsync = require("../utils/catchAsync");
 
 const {
   createUser,
-  findUniqueUser,
+  profileUser,
+  getUserById,
   findManyUsers,
-  updateUser,
+  updateUserById,
+  deleteUserById,
 } = require("../services/user.service");
 
-const register = catchAsync(async (req, res) => {
+const registerUser = catchAsync(async (req, res) => {
   const user = await createUser(req.body);
   res.status(httpStatus.CREATED).send(user);
 });
@@ -22,26 +24,44 @@ const getUsers = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getProfile = catchAsync(async (req, res) => {
+  const profile = await profileUser(req.user);
+  if (!profile) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  res.send(profile);
+});
+
 const getUser = catchAsync(async (req, res) => {
-  const user = await userService.getUserById(req.params.userId);
+  const user = await getUserById(req.params.userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
   res.send(user);
 });
 
-const updateUsers = catchAsync(async (req, res) => {
-  const user = await updateUser({
+const updateUser = catchAsync(async (req, res) => {
+  const user = await updateUserById({
     where: { id: req.params.userId },
     data: req.body,
   });
+  res.send(user);
+  // res.send(pick(user, ["id", "name", "email", "role"]));
+});
 
-  res.send(pick(user, ["id", "name", "email", "role"]));
+const deleteUser = catchAsync(async (req, res) => {
+  // await deleteUserById({
+  //   where: { id: req.params.userId },
+  // });
+  await deleteUserById(req.params.userId);
+  res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {
-  register,
+  registerUser,
   getUsers,
   getUser,
-  updateUsers,
+  getProfile,
+  updateUser,
+  deleteUser,
 };
