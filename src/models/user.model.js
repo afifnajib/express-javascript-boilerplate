@@ -1,48 +1,31 @@
-// user.model.js
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+class userModel {
+  constructor(userData) {
+    this.id = userData.id;
+    this.name = userData.name;
+    this.email = userData.email;
+    this.password = userData.password;
+    this.role = userData.role;
+    this.isEmailVerified = userData.isEmailVerified || false;
+    this.createdAt = userData.createdAt || new Date().toISOString();
+    this.updatedAt = userData.updatedAt || new Date().toISOString();
+  }
 
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
+  validateEmail() {
+    return validator.isEmail(this.email);
+  }
 
-const userModel = {
-  name: 'User',
+  hashPassword() {
+    const salt = bcrypt.genSaltSync(10);
+    this.password = bcrypt.hashSync(this.password, salt);
+  }
 
-  fields: {
-    id: { type: 'uuid', default: { uuid: true } },
-    name: { type: 'String', required: true },
-    email: {
-      type: 'String',
-      required: true,
-      validate: {
-        validator: (value) => validator.isEmail(value),
-        message: 'Invalid email',
-      },
-    },
-    password: {
-      type: 'String',
-      required: true,
-    },
-    role: { type: 'String', required: true },
+  isPasswordMatch(password) {
+    return bcrypt.compareSync(password, this.password);
+  }
+}
 
-    isEmailVerified: { type: 'Boolean', default: false },
-
-    createdAt: { type: 'DateTime', default: { now: true } },
-
-    updatedAt: { type: 'DateTime', default: { now: true } },
-  },
-
-  hooks: {
-    beforeSave: async (user) => {
-      if (user.password) {
-        user.password = await bcrypt.hash(user.password, 8);
-      }
-    },
-  },
-
-  methods: {
-    validatePassword(password) {
-      return bcrypt.compare(password, this.password);
-    },
-  },
+module.exports = {
+  userModel,
 };
-
-module.exports = { userModel };
