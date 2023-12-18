@@ -24,18 +24,48 @@ const createUser = async (userData) => {
   return prisma.user.create({
     data: userData.role === undefined ? forAdmin : forUser,
   });
+
+  // const users = [];
+  // for (let i = 0; i < userData.length; i++) {
+  //   const validate = await validateEmail(userData[i].email);
+  //   if (!validate) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, "Invalid email");
+  //   }
+  //   const hashedPassword = hashPassword(userData[i].password);
+  //   const exists = await prisma.user.findUnique({
+  //     where: {
+  //       email: userData[i].email,
+  //     },
+  //   });
+  //   if (exists) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, "Email already exists");
+  //   }
+  //   users.push({
+  //     ...userData[i],
+  //     password: hashedPassword,
+  //   });
+  // }
+  // return prisma.user.createMany({
+  //   data: users,
+  // });
 };
 
-const findManyUsers = async (params) => {
-  const { skip, take, cursor, where, orderBy } = params;
-
-  return prisma.user.findMany({
-    skip,
-    take,
-    cursor,
-    where,
-    orderBy,
+const findManyUsers = async (filter, options) => {
+  const users = await prisma.user.findMany({
+    where: filter,
+    skip: options.skip,
+    take: options.take,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isEmailVerified: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
+  return users;
 };
 
 const findUniqueUser = async ({ where }) => {

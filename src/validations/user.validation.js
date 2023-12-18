@@ -8,6 +8,14 @@ const createUser = {
     name: Joi.string().required(),
     role: Joi.string().required().valid("user", "admin"),
   }),
+  // body: Joi.array().items(
+  //   Joi.object({
+  //     email: Joi.string().required().email(),
+  //     password: Joi.string().required().custom(password),
+  //     name: Joi.string().required(),
+  //     role: Joi.string().required().valid("user", "admin"),
+  //   })
+  // ),
 };
 
 const getUsers = {
