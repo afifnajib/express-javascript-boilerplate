@@ -6,6 +6,7 @@ const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
+router.get("/", authController.testing);
 router.post(
   "/register",
   validate(authValidation.register),

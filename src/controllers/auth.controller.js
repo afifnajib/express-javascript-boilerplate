@@ -58,7 +58,13 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const testing = catchAsync(async (req, res) => {
+  const user = "MANA SAYA TAHU";
+  res.send({ user });
+});
+
 module.exports = {
+  testing,
   register,
   login,
   logout,
