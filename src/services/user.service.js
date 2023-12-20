@@ -87,7 +87,9 @@ const profileUser = async (req) => {
 
 const getUserById = async (id) => {
   const user = await prisma.user.findUnique({ where: { id } });
-  delete user.password;
+  if (user) {
+    delete user.password;
+  }
   return user;
 };
 
@@ -112,18 +114,22 @@ const updateUserById = async (params) => {
 };
 
 const deleteUserById = async (userId) => {
-  const tokenExists = await prisma.token.findUnique({
+  const tokenExists = await prisma.token.findMany({
     where: { userId },
   });
 
-  if (tokenExists) {
+  if (tokenExists.length > 0) {
     await prisma.token.delete({
       where: { userId },
     });
   }
-  return prisma.user.delete({
+  return await prisma.user.delete({
     where: { id: userId },
   });
+};
+
+const managePassword = async (dataPasswords) => {
+  return "belum pasti";
 };
 
 module.exports = {
@@ -135,4 +141,5 @@ module.exports = {
   findUniqueUser,
   updateUserById,
   deleteUserById,
+  managePassword,
 };

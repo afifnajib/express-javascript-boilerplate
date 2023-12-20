@@ -3,8 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
-  // url      = "mysql://root:password@127.0.0.1:3306/learning_express"
+  provider = "mysql"
   url = env("DATABASE_URL")
 }
 

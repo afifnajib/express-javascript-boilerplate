@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { password, objectId } = require("./custom.validation");
+const { password } = require("./custom.validation");
 
 const createUser = {
   body: Joi.object().keys({
@@ -53,10 +53,19 @@ const deleteUser = {
   }),
 };
 
+const changePassword = {
+  body: Joi.object().keys({
+    oldPassword: Joi.string().required().custom(password),
+    newPassword: Joi.string().required().custom(password),
+    confirmPassword: Joi.string().required().custom(password),
+  }),
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  changePassword,
 };

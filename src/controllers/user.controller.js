@@ -11,6 +11,7 @@ const {
   findManyUsers,
   updateUserById,
   deleteUserById,
+  managePassword,
 } = require("../services/user.service");
 
 const registerUser = catchAsync(async (req, res) => {
@@ -59,10 +60,15 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const deleteUser = catchAsync(async (req, res) => {
-  // await deleteUserById({
-  //   where: { id: req.params.userId },
-  // });
+  await deleteUserById({
+    where: { id: req.params.userId },
+  });
   await deleteUserById(req.params.userId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+const changePassword = catchAsync(async (req, res) => {
+  await managePassword(req.body);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -73,4 +79,5 @@ module.exports = {
   getProfile,
   updateUser,
   deleteUser,
+  changePassword,
 };
