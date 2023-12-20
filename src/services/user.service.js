@@ -115,7 +115,7 @@ const updateUserById = async (params) => {
 
 const deleteUserById = async (userId) => {
   const tokenExists = await prisma.token.findMany({
-    where: { userId },
+    where: { id: userId },
   });
 
   if (tokenExists.length > 0) {

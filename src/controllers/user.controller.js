@@ -60,9 +60,6 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const deleteUser = catchAsync(async (req, res) => {
-  await deleteUserById({
-    where: { id: req.params.userId },
-  });
   await deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
 });
