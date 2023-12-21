@@ -117,19 +117,22 @@ const deleteUserById = async (userId) => {
   const tokenExists = await prisma.token.findMany({
     where: { id: userId },
   });
-
   if (tokenExists.length > 0) {
-    await prisma.token.delete({
+    await prisma.token.updateMany({
       where: { userId },
+      data: { revoked: true },
     });
   }
-  return await prisma.user.delete({
+  return await prisma.user.update({
     where: { id: userId },
+    data: {
+      deletedAt: new Date(),
+    },
   });
 };
 
 const managePassword = async (dataPasswords) => {
-  return "belum pasti";
+  return dataPasswords;
 };
 
 module.exports = {
