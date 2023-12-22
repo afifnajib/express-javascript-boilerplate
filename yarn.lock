@@ -373,6 +373,11 @@
     "minimatch" "^3.0.4"
     "strip-json-comments" "^3.1.1"
 
+"@faker-js/faker@^8.3.1":
+  "integrity" "sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw=="
+  "resolved" "https://registry.npmjs.org/@faker-js/faker/-/faker-8.3.1.tgz"
+  "version" "8.3.1"
+
 "@hapi/hoek@^9.0.0":
   "integrity" "sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug=="
   "resolved" "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.2.0.tgz"
@@ -2958,6 +2963,15 @@
   "resolved" "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
   "version" "0.5.2"
 
+"fs-extra@^11.2.0":
+  "integrity" "sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw=="
+  "resolved" "https://registry.npmjs.org/fs-extra/-/fs-extra-11.2.0.tgz"
+  "version" "11.2.0"
+  dependencies:
+    "graceful-fs" "^4.2.0"
+    "jsonfile" "^6.0.1"
+    "universalify" "^2.0.0"
+
 "fs-extra@^8.1.0":
   "integrity" "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g=="
   "resolved" "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz"
@@ -4300,9 +4314,18 @@
     "minimist" "^1.2.5"
 
 "jsonfile@^4.0.0":
-  "integrity" "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss= sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg=="
+  "integrity" "sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg=="
   "resolved" "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz"
   "version" "4.0.0"
+  optionalDependencies:
+    "graceful-fs" "^4.1.6"
+
+"jsonfile@^6.0.1":
+  "integrity" "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ=="
+  "resolved" "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz"
+  "version" "6.1.0"
+  dependencies:
+    "universalify" "^2.0.0"
   optionalDependencies:
     "graceful-fs" "^4.1.6"
 
@@ -6882,6 +6905,11 @@
   "integrity" "sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg=="
   "resolved" "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz"
   "version" "0.1.2"
+
+"universalify@^2.0.0":
+  "integrity" "sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw=="
+  "resolved" "https://registry.npmjs.org/universalify/-/universalify-2.0.1.tgz"
+  "version" "2.0.1"
 
 "unpipe@~1.0.0", "unpipe@1.0.0":
   "integrity" "sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw= sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ=="

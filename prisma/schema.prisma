@@ -23,7 +23,7 @@ model User {
  createdAt DateTime @default(now())
  updatedAt DateTime @default(now())
  tokens   Token[]
- deletedAt DateTime
+ deletedAt DateTime?
   @@map("users")
 }
 
